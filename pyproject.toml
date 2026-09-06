@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ucursito"
+version = "0.2.0"
+description = "U-Cursos scraper and calendar exporter"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+keywords = ["ucursos", "scraper", "calendar", "ics", "universidad", "chile"]
+authors = [
+    {name = "Ian Berdichewsky", email = "ian.berdichewsky@ug.uchile.cl"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+]
+
+dependencies = [
+    "selenium>=4.15.0",
+    "icalendar>=5.0.11",
+    "click>=8.1.7",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+    "tqdm>=4.66.0",
+    "colorama>=0.4.6",
+]
+
+[project.urls]
+Homepage = "https://github.com/iaaaanb/ucursito"
+"Bug Reports" = "https://github.com/iaaaanb/ucursito/issues"
+"Source" = "https://github.com/iaaaanb/ucursito"
+
+[tool.setuptools]
+packages = ["src"]
+py-modules = ["config"]
+# ucursito es un script ejecutable, no un modulo importable: se instala tal cual
+script-files = ["ucursito"]
+
+[tool.setuptools.package-data]
+src = ["*.py"]
