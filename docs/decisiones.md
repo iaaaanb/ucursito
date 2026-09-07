@@ -72,3 +72,38 @@ tipo, título, timestamp). La primera versión usaba `hash()` de Python, que est
 aleatorizado por proceso desde 3.3: cada corrida producía UIDs distintos, así
 que reimportar el calendario duplicaba todos los eventos en vez de
 actualizarlos.
+
+## No revivir el login rodeando la detección de bots
+
+**Problema.** En algún momento entre noviembre de 2025 y septiembre de 2026,
+U-Cursos movió la autenticación a Cuenta Uchile: la portada dejó de tener
+formulario y ahora abre un flujo OAuth2 en `oauth2.uchile.cl`, protegido con
+Cloudflare Turnstile. El login por formulario de este proyecto quedó obsoleto de
+un día para otro.
+
+**Qué intenté.** Un login asistido, que parecía la salida limpia: abrir Chromium
+con un perfil persistente, que la persona inicie sesión a mano una vez
+—resolviendo el Turnstile ella misma—, y que las corridas siguientes reutilicen
+esa sesión desde el perfil.
+
+Dos hallazgos lo descartaron:
+
+1. **Turnstile rechaza el browser, no al usuario.** Da lo mismo que el desafío
+   lo resuelva una persona: lo que se detecta es que el browser está manejado
+   por chromedriver. Falla igual con ventana visible que en headless.
+2. **La sesión no sobrevive al cierre del browser.** Inspeccionando las cookies
+   del perfil: `PHPSESSID` de `www.u-cursos.cl` no es persistente. Sí lo es
+   `sl-session`, la del proveedor de identidad, pero reutilizarla exige rehacer
+   el handshake OAuth2, que vuelve a pasar por Turnstile.
+
+**Decisión.** No seguir. Existen formas de esquivar la detección
+—undetected-chromedriver, binarios parcheados, enganchar Selenium a un Chrome
+lanzado a mano por el puerto de depuración— y todas consisten en pasar por
+encima de una medida que la universidad puso deliberadamente. No es una barrera
+técnica que valga la pena vencer: es una respuesta a la pregunta de si el sitio
+quiere ser automatizado.
+
+**Qué haría falta si esto se retomara.** Que U-Cursos exponga una API o algún
+mecanismo de acceso para terceros. Sin eso, cualquier versión que funcione se
+sostiene sobre evadir el control anti-bots, y prefiero un proyecto que no corre
+a uno que corre así.

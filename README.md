@@ -53,10 +53,17 @@ usuario y contraseña, y el flujo pasa por OAuth2 en `oauth2.uchile.cl` detrás 
 Cloudflare Turnstile. El login por formulario de `src/auth.py` corresponde al
 sitio anterior y hoy termina en timeout.
 
-Turnstile es una medida antiautomatización deliberada de la universidad, así que
-no pienso rodearla. La forma correcta de revivir esto sería un login asistido:
-abrir el browser, que la persona inicie sesión a mano una vez, y seguir con esa
-sesión reutilizando el perfil. Está pendiente y no lo he implementado.
+Intenté revivirlo con un login asistido —abrir el browser, iniciar sesión a
+mano, reutilizar la sesión desde un perfil persistente— y **no funciona**, por
+dos razones que comprobé: Turnstile rechaza el browser aunque el desafío lo
+resuelva una persona, porque lo que detecta es el browser automatizado y no al
+usuario; y la cookie de sesión de U-Cursos (`PHPSESSID`) no es persistente, así
+que aunque se pasara, la sesión moriría al cerrar el browser y habría que
+repetir el trámite en cada corrida.
+
+Rodear esa detección es posible, y no es el camino: es la medida
+antiautomatización que la universidad puso a propósito. El detalle está en
+[docs/decisiones.md](docs/decisiones.md).
 
 Lo demás sigue en pie como descripción de lo que hace el código:
 
