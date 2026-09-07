@@ -63,8 +63,15 @@ el ramo que no esté en el diccionario usa su nombre completo.
 
 ## Si U-Cursos cambia
 
+Ya pasó una vez: la autenticación por formulario dejó de existir cuando la
+universidad movió el login a Cuenta Uchile (ver "Estado y limitaciones" en el
+README). El resto de los selectores no se ha podido volver a comprobar desde
+entonces, porque sin login no hay páginas que mirar.
+
 El scraper depende de selectores CSS concretos. Los que se rompen primero:
 
+- `button[type="submit"].boton` en la portada — **ya no aplica**: ahora ese
+  botón abre el flujo OAuth2 de Cuenta Uchile en vez de un formulario
 - `li[id^="curso."]` dentro de `div#cursos` — la lista de ramos (`auth.py`, `scraper.py`)
 - `tr.separador[data-categoria]` — las categorías de cada tabla
 - `table#materiales`, `table#tarea` — las tablas de material y de tarea

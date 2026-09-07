@@ -9,6 +9,10 @@ mano, bajar los PDF sueltos y anotar las fechas de control en alguna parte.
 `Curso/Categoría/` y genera un calendario que puedes suscribir desde
 Thunderbird, Google Calendar o Apple Calendar.
 
+> **El login dejó de funcionar** desde que U-Cursos migró la autenticación a
+> Cuenta Uchile. Lee [Estado y limitaciones](#estado-y-limitaciones) antes de
+> instalar nada.
+
 **Stack:** Python 3.8+ · Selenium sobre Chromium · icalendar · click · empaquetado `.deb`
 
 ## Instalación
@@ -41,13 +45,25 @@ destino y `--no-headless` muestra el browser.
 
 ## Estado y limitaciones
 
-Herramienta de uso personal, escrita contra U-Cursos tal como estaba en el
-semestre Primavera 2025. Vale la pena ser explícito sobre qué no cubre:
+Herramienta de uso personal, escrita y usada durante el semestre Primavera 2025.
+
+**El login ya no funciona.** Comprobado el 6 de septiembre de 2026: U-Cursos
+migró la autenticación a Cuenta Uchile, el portal ya no expone un formulario de
+usuario y contraseña, y el flujo pasa por OAuth2 en `oauth2.uchile.cl` detrás de
+Cloudflare Turnstile. El login por formulario de `src/auth.py` corresponde al
+sitio anterior y hoy termina en timeout.
+
+Turnstile es una medida antiautomatización deliberada de la universidad, así que
+no pienso rodearla. La forma correcta de revivir esto sería un login asistido:
+abrir el browser, que la persona inicie sesión a mano una vez, y seguir con esa
+sesión reutilizando el perfil. Está pendiente y no lo he implementado.
+
+Lo demás sigue en pie como descripción de lo que hace el código:
 
 - **Depende del HTML de U-Cursos.** Todo el scraping son selectores CSS contra
-  la estructura actual del sitio. Si cambia el markup, las secciones afectadas
-  dejan de encontrar datos y hay que actualizar los selectores. Los más frágiles
-  están listados en [docs/desarrollo.md](docs/desarrollo.md).
+  la estructura del sitio. El login fue el primero en romperse; el resto de las
+  secciones no las he podido volver a verificar desde entonces. Los selectores
+  más frágiles están listados en [docs/desarrollo.md](docs/desarrollo.md).
 - **Solo Linux.** Por defecto busca Chromium y su driver en `/usr/bin`; con
   `CHROMIUM_PATH` y `CHROMEDRIVER_PATH` se apunta a otra ubicación, como la del
   snap. No hay valores por defecto para Windows ni macOS.
@@ -57,7 +73,7 @@ semestre Primavera 2025. Vale la pena ser explícito sobre qué no cubre:
   sitio real, y si Selenium resuelve esos `href` a absolutos, el filtro estaría
   descartando también archivos internos.
 - **Sin tests automatizados.** La verificación fue manual, corriendo con
-  `--no-headless` contra mi propia cuenta.
+  `--no-headless` contra mi propia cuenta mientras el login funcionaba.
 - **Las credenciales se guardan en texto plano** en
   `~/.config/ucursito/credentials` con permisos 600. Suficiente para uso
   personal en la propia máquina, no para nada más.
