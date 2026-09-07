@@ -37,6 +37,9 @@ dependencies = [
     "colorama>=0.4.6",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
 [project.urls]
 Homepage = "https://github.com/iaaaanb/ucursito"
 "Bug Reports" = "https://github.com/iaaaanb/ucursito/issues"
@@ -50,3 +53,6 @@ script-files = ["ucursito"]
 
 [tool.setuptools.package-data]
 src = ["*.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

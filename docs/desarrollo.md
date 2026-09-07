@@ -44,6 +44,29 @@ Los archivos que ya existen en disco no se vuelven a descargar. Para las tareas
 hay un segundo atajo: antes de visitar cada una se lee el `calendar.ics` de la
 corrida anterior y se saltan las que ya están registradas.
 
+## Tests
+
+```bash
+pip install pytest
+pytest
+```
+
+Cubren las funciones que no necesitan browser ni sesión: `sanitize_filename` y
+`get_course_folder_name` en `scraper.py`, y `parse_time_range` y `build_uid` en
+`calendar_export.py`. Son las que, si fallan en silencio, dejan los archivos mal
+guardados o el calendario duplicado sin que nada avise.
+
+El de `build_uid` que corre en dos procesos separados existe por un bug real:
+los UID se armaban con `hash()`, que en Python está aleatorizado por proceso, así
+que cada corrida generaba identificadores nuevos y reimportar el `.ics` duplicaba
+todos los eventos en vez de actualizarlos. Ese test falla si alguien vuelve a
+introducir un hash no determinista.
+
+El resto —la navegación y el parseo de las tablas— no está testeado porque
+necesitaría una sesión de U-Cursos. La forma de hacerlo sería guardar el HTML de
+cada tipo de página como fixture y probar los parsers contra esos archivos, sin
+browser.
+
 ## Correr en desarrollo
 
 ```bash

@@ -79,8 +79,9 @@ Lo demás sigue en pie como descripción de lo que hace el código:
   archivos internos vienen con rutas relativas. No lo he comprobado contra el
   sitio real, y si Selenium resuelve esos `href` a absolutos, el filtro estaría
   descartando también archivos internos.
-- **Sin tests automatizados.** La verificación fue manual, corriendo con
-  `--no-headless` contra mi propia cuenta mientras el login funcionaba.
+- **Los tests cubren solo las funciones puras** (nombres de archivo y carpeta,
+  parseo de horarios, UIDs del calendario). El scraping en sí no está testeado:
+  requeriría una sesión de U-Cursos, que es justamente lo que hoy no hay.
 - **Las credenciales se guardan en texto plano** en
   `~/.config/ucursito/credentials` con permisos 600. Suficiente para uso
   personal en la propia máquina, no para nada más.
