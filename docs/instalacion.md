@@ -10,8 +10,20 @@
 sudo apt install chromium-browser chromium-chromedriver
 ```
 
-Las rutas del browser y del driver están fijas en `src/auth.py`, así que el
-scraper no funciona en macOS ni con otras ubicaciones sin editar ese archivo.
+Si tu distribución ya no trae Chromium como paquete deb y lo instalas por snap
+(`sudo snap install chromium`), los binarios quedan en otra ruta y hay que
+indicarla en el `.env`:
+
+```env
+CHROMIUM_PATH=/snap/chromium/current/usr/lib/chromium-browser/chrome
+CHROMEDRIVER_PATH=/snap/bin/chromium.chromedriver
+```
+
+Tiene que ser el binario interno del snap y no el lanzador `/snap/bin/chromium`:
+con el lanzador, chromedriver falla al hacer exec y la sesión no se crea.
+
+Sin esas variables se usan `/usr/bin/chromium-browser` y `/usr/bin/chromedriver`.
+En cualquier caso el scraper espera Linux: no hay rutas por defecto para macOS.
 
 ## Desde el código fuente
 
@@ -107,8 +119,8 @@ que pasa después de instalar: `debian-template/DEBIAN/postinst`.
 ## Problemas frecuentes
 
 **El driver no arranca.** Verifica que existan `/usr/bin/chromium-browser` y
-`/usr/bin/chromedriver`. Si tu distribución los instala en otra ruta, hay que
-editarlas en `src/auth.py`.
+`/usr/bin/chromedriver`. Si tu distribución los instala en otra ruta, apúntala
+con `CHROMIUM_PATH` y `CHROMEDRIVER_PATH`.
 
 **Falla el login.** Usa tu nombre de usuario de U-Cursos, no el correo. Corre
 con `--no-headless` para ver qué está pasando en el browser. Si U-Cursos cambió

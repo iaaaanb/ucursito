@@ -48,8 +48,9 @@ semestre Primavera 2025. Vale la pena ser explícito sobre qué no cubre:
   la estructura actual del sitio. Si cambia el markup, las secciones afectadas
   dejan de encontrar datos y hay que actualizar los selectores. Los más frágiles
   están listados en [docs/desarrollo.md](docs/desarrollo.md).
-- **Solo Linux.** Las rutas de Chromium y chromedriver están fijas en
-  `src/auth.py` (`/usr/bin/...`).
+- **Solo Linux.** Por defecto busca Chromium y su driver en `/usr/bin`; con
+  `CHROMIUM_PATH` y `CHROMEDRIVER_PATH` se apunta a otra ubicación, como la del
+  snap. No hay valores por defecto para Windows ni macOS.
 - **El filtro de enlaces externos no está verificado.** Las secciones Novedades y
   Tareas descartan los enlaces cuyo `href` es una URL absoluta, asumiendo que los
   archivos internos vienen con rutas relativas. No lo he comprobado contra el

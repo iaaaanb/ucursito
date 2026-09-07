@@ -18,10 +18,11 @@ def get_driver(headless=False, download_dir=None):
     """
     Initialize and return a Chromium WebDriver instance.
 
-    Both the driver and the browser binary are hardcoded to their Debian/Ubuntu
-    locations under /usr/bin, so this only works on Linux with the
-    chromium-browser and chromium-chromedriver packages installed. Change the
-    two paths below to run it elsewhere.
+    Defaults to the Debian/Ubuntu locations of the chromium-browser and
+    chromium-chromedriver packages, under /usr/bin. Installs that put them
+    elsewhere -- the Chromium snap, for one, which uses /snap/bin -- can point
+    at them with CHROMIUM_PATH and CHROMEDRIVER_PATH. Either way this expects
+    Linux: there are no Windows or macOS defaults.
 
     In headless mode Chromium ignores the download preferences set here, so the
     download directory is set again over the DevTools Protocol
@@ -34,9 +35,9 @@ def get_driver(headless=False, download_dir=None):
     Returns:
         WebDriver: Configured Chromium WebDriver instance
     """
-    service = Service('/usr/bin/chromedriver')
+    service = Service(os.getenv('CHROMEDRIVER_PATH', '/usr/bin/chromedriver'))
     options = Options()
-    options.binary_location = '/usr/bin/chromium-browser'
+    options.binary_location = os.getenv('CHROMIUM_PATH', '/usr/bin/chromium-browser')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--disable-gpu')
